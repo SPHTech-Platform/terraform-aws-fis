@@ -43,7 +43,7 @@ variable "actions" {
 
     description = optional(string)
     parameter   = optional(map(string), {})
-    start_after = optional(string)
+    start_after = optional(list(string))
     target = optional(object({
       key   = string
       value = string
