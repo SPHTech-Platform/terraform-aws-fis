@@ -22,11 +22,11 @@ resource "aws_fis_experiment_template" "this" {
       start_after = action.value.start_after
 
       dynamic "parameter" {
-        for_each = action.value.parameter[*]
+        for_each = action.value.parameter
 
         content {
-          key   = parameter.value.key
-          value = parameter.value.value
+          key   = parameter.key
+          value = parameter.value
         }
       }
 
