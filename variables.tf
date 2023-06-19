@@ -69,13 +69,13 @@ variable "targets" {
     filter = optional(list(object({
       path   = string
       values = list(string)
-    })))
+    })), [])
 
     resource_arns = optional(list(string))
 
     resource_tags = optional(list(object({
       key   = string
       value = string
-    })))
+    })), [])
   }))
 }
