@@ -22,20 +22,20 @@ resource "aws_fis_experiment_template" "this" {
       start_after = action.value.start_after
 
       dynamic "parameter" {
-        for_each = action.value.parameter
+        for_each = action.value.parameter[*]
 
         content {
-          key   = lookup(each.value, "key")
-          value = lookup(each.value, "value")
+          key   = parameter.value.key
+          value = parameter.value.value
         }
       }
 
       dynamic "target" {
-        for_each = action.value.target
+        for_each = action.value.target[*]
 
         content {
-          key   = lookup(each.value, "key")
-          value = lookup(each.value, "value")
+          key   = target.value.key
+          value = target.value.value
         }
       }
     }
