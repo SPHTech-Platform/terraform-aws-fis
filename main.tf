@@ -25,16 +25,19 @@ resource "aws_fis_experiment_template" "this" {
         for_each = action.value.parameter
 
         content {
-          key   = parameter.value.key
-          value = parameter.value.value
+          key   = lookup(each.value, "key")
+          value = lookup(each.value, "value")
         }
       }
 
-      target {
-        key   = action.value.target.key
-        value = action.value.target.value
-      }
+      dynamic "target" {
+        for_each = action.value.target
 
+        content {
+          key   = lookup(each.value, "key")
+          value = lookup(each.value, "value")
+        }
+      }
     }
   }
 
