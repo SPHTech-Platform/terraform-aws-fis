@@ -30,14 +30,11 @@ resource "aws_fis_experiment_template" "this" {
         }
       }
 
-      dynamic "target" {
-        for_each = action.value.target
-
-        content {
-          key   = target.value.key
-          value = target.value.value
-        }
+      target {
+        key   = action.value.target.key
+        value = action.value.target.value
       }
+
     }
   }
 
