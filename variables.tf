@@ -19,12 +19,12 @@ variable "fis_role_name" {
 variable "fis_policies" {
   description = "Types of policies to attach to the FIS role"
   type = object({
-    ec2     = optional(bool)
-    ecs     = optional(bool)
-    eks     = optional(bool)
-    network = optional(bool)
-    rds     = optional(bool)
-    ssm     = optional(bool)
+    ec2     = optional(bool, false)
+    ecs     = optional(bool, false)
+    eks     = optional(bool, false)
+    network = optional(bool, false)
+    rds     = optional(bool, false)
+    ssm     = optional(bool, false)
   })
   default = {}
 }
