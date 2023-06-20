@@ -25,13 +25,13 @@ resource "aws_fis_experiment_template" "this" {
         for_each = action.value.parameter
 
         content {
-          key   = parameter.value.key
-          value = parameter.value.value
+          key   = parameter.key
+          value = parameter.value
         }
       }
 
       dynamic "target" {
-        for_each = action.value.target
+        for_each = compact([action.value.target])
 
         content {
           key   = target.value.key

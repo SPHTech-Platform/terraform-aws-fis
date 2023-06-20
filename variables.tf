@@ -43,7 +43,7 @@ variable "actions" {
 
     description = optional(string)
     parameter   = optional(map(string), {})
-    start_after = optional(string)
+    start_after = optional(list(string))
     target = optional(object({
       key   = string
       value = string
@@ -69,13 +69,13 @@ variable "targets" {
     filter = optional(list(object({
       path   = string
       values = list(string)
-    })))
+    })), [])
 
     resource_arns = optional(list(string))
 
     resource_tags = optional(list(object({
       key   = string
       value = string
-    })))
+    })), [])
   }))
 }
