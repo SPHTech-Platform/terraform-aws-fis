@@ -31,7 +31,7 @@ resource "aws_fis_experiment_template" "this" {
       }
 
       dynamic "target" {
-        for_each = action.value.target[*]
+        for_each = compact([action.value.target])
 
         content {
           key   = target.value.key
