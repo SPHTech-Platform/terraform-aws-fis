@@ -29,6 +29,12 @@ variable "fis_policies" {
   default = {}
 }
 
+variable "experiment_name" {
+  description = "Name of FIS experiment"
+  type        = string
+  default     = "experiment"
+}
+
 variable "experiment_description" {
   description = "Description of the FIS experiment"
   type        = string

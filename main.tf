@@ -2,6 +2,10 @@ resource "aws_fis_experiment_template" "this" {
   description = var.experiment_description
   role_arn    = module.fis_role.iam_role_arn
 
+  tags = {
+    Name = var.experiment_name
+  }
+
   dynamic "stop_condition" {
     for_each = var.stop_conditions
 
