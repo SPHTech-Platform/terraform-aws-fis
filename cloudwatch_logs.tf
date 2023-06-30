@@ -8,7 +8,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 data "aws_iam_policy_document" "fis_cloudwatch_logs" {
-  count = var.cloudwatch_logging.enabled && var.cloudwatch_logging.log_group_create ? 1 : 0
+  count = var.cloudwatch_logging.enabled && var.cloudwatch_logging.log_group_create && var.create_fis_role ? 1 : 0
 
   statement {
     actions = [
@@ -18,31 +18,13 @@ data "aws_iam_policy_document" "fis_cloudwatch_logs" {
     ]
 
     resources = ["${aws_cloudwatch_log_group.this[0].arn}:*"]
-
-    principals {
-      type        = "AWS"
-      identifiers = [local.fis_iam_role_arn]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-
-      values = [data.aws_caller_identity.current.account_id]
-    }
   }
 }
 
-resource "aws_cloudwatch_log_resource_policy" "this" {
-  count = var.cloudwatch_logging.enabled && var.cloudwatch_logging.log_group_create ? 1 : 0
+resource "aws_iam_role_policy" "cloudwatch_logging" {
+  count = var.cloudwatch_logging.enabled && var.cloudwatch_logging.log_group_create && var.create_fis_role ? 1 : 0
 
-  policy_name     = "${var.experiment_name}-logging"
-  policy_document = data.aws_iam_policy_document.fis_cloudwatch_logs[0].json
-}
-
-
-data "aws_cloudwatch_log_group" "this" {
-  count = var.cloudwatch_logging.enabled && !var.cloudwatch_logging.log_group_create ? 1 : 0
-
-  name = var.cloudwatch_logging.log_group
+  name_prefix = "fis-cloudwatch-logs"
+  role        = module.fis_role.iam_role_name
+  policy      = data.aws_iam_policy_document.fis_cloudwatch_logs[0].json
 }
