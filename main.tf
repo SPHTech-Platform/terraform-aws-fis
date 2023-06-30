@@ -1,6 +1,10 @@
+locals {
+  fis_iam_role_arn = var.create_fis_role ? module.fis_role.iam_role_arn : data.aws_iam_role.fis[0].arn
+}
+
 resource "aws_fis_experiment_template" "this" {
   description = var.experiment_description
-  role_arn    = module.fis_role.iam_role_arn
+  role_arn    = local.fis_iam_role_arn
 
   tags = {
     Name = var.experiment_name

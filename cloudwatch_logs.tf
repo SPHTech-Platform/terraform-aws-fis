@@ -20,8 +20,8 @@ data "aws_iam_policy_document" "fis_cloudwatch_logs" {
     resources = ["${aws_cloudwatch_log_group.this[0].arn}:*"]
 
     principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "AWS"
+      identifiers = [local.fis_iam_role_arn]
     }
 
     condition {
@@ -32,8 +32,8 @@ data "aws_iam_policy_document" "fis_cloudwatch_logs" {
     }
 
     condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
 
       values = ["arn:${data.aws_partition.current.partition}:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"]
     }
