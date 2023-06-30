@@ -7,6 +7,12 @@ resource "aws_cloudwatch_log_group" "this" {
   kms_key_id        = var.cloudwatch_logging.log_group_kms_key_id
 }
 
+data "aws_cloudwatch_log_group" "this" {
+  count = var.cloudwatch_logging.enabled && !var.cloudwatch_logging.log_group_create ? 1 : 0
+
+  name = var.cloudwatch_logging.log_group
+}
+
 data "aws_iam_policy_document" "fis_cloudwatch_logs" {
   count = var.cloudwatch_logging.enabled && var.cloudwatch_logging.log_group_create && var.create_fis_role ? 1 : 0
 
