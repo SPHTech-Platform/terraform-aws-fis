@@ -85,3 +85,25 @@ variable "targets" {
     })), [])
   }))
 }
+
+variable "log_schema_version" {
+  description = "Log schema version"
+  type        = number
+  default     = 2
+}
+
+variable "cloudwatch_logging" {
+  description = "Configure cloudwatch logging"
+  type = object({
+    enabled = optional(bool, false)
+
+    log_group                   = optional(string)     # name of log group
+    log_group_create            = optional(bool, true) # create log group
+    log_group_retention_in_days = optional(number, 30) #  Specifies the number of days you want to retain log events in the specified log group. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, 3653, and 0. If you select 0, the events in the log group are always retained and never expire.
+    log_group_kms_key_id        = optional(string, null)
+  })
+
+  default = {
+    enabled = false
+  }
+}

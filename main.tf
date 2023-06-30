@@ -1,6 +1,10 @@
+locals {
+  fis_iam_role_arn = var.create_fis_role ? module.fis_role.iam_role_arn : data.aws_iam_role.fis[0].arn
+}
+
 resource "aws_fis_experiment_template" "this" {
   description = var.experiment_description
-  role_arn    = module.fis_role.iam_role_arn
+  role_arn    = local.fis_iam_role_arn
 
   tags = {
     Name = var.experiment_name
@@ -70,6 +74,22 @@ resource "aws_fis_experiment_template" "this" {
         content {
           key   = resource_tag.value.key
           value = resource_tag.value.value
+        }
+      }
+    }
+  }
+
+  dynamic "log_configuration" {
+    for_each = var.cloudwatch_logging.enabled ? [{}] : []
+
+    content {
+      log_schema_version = var.log_schema_version
+
+      dynamic "cloudwatch_logs_configuration" {
+        for_each = var.cloudwatch_logging.enabled ? [{}] : []
+
+        content {
+          log_group_arn = var.cloudwatch_logging.log_group_create ? "${aws_cloudwatch_log_group.this[0].arn}:*" : "${data.aws_cloudwatch_log_group.this[0].arn}:*"
         }
       }
     }
